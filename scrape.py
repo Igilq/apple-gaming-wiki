@@ -484,7 +484,7 @@ def main():
     wiki_url = "https://www.applegamingwiki.com/wiki/M1_compatible_games_master_list"
 
     # CSV file to store/read compatibility data
-    csv_filename = "m1_compatible_games.csv"
+    csv_filename = "../applegamingwiki/m1_compatible_games.csv"
 
     # Auto-update compatibility database if needed
     should_update = args.update or should_update_database(csv_filename)
