@@ -284,11 +284,61 @@ def get_steam_username(steam_id):
 
     return None
 
-def get_steam_games(steam_id):
+def get_steam_games_api(steam_id, api_key):
+    """
+    Get the list of games owned by a Steam user using the official Steam API.
+    Requires a Steam API key.
+
+    Args:
+        steam_id (str): The Steam ID of the user
+        api_key (str): The Steam API key
+
+    Returns:
+        list: A list of game names owned by the user
+    """
+    try:
+        # Use the official Steam API to get the user's games
+        url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={api_key}&steamid={steam_id}&include_appinfo=1&format=json"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            if 'response' in data and 'games' in data['response']:
+                games = data['response']['games']
+                game_names = [game.get('name', '') for game in games if game.get('name')]
+                print(f"Successfully extracted {len(game_names)} games using Steam API")
+                return game_names
+            else:
+                print("No games found in the API response. The user's game list may be private.")
+        else:
+            print(f"Failed to retrieve Steam games via API. Status code: {response.status_code}")
+            if response.status_code == 403:
+                print("API key may be invalid or unauthorized.")
+    except Exception as e:
+        print(f"Error fetching Steam games via API: {e}")
+
+    return []
+
+def get_steam_games(steam_id, api_key=None):
     """
     Get the list of games owned by a Steam user.
-    First tries the XML API, then falls back to the JSON method if that fails.
+    If an API key is provided, uses the official Steam API.
+    Otherwise, tries the XML API first, then falls back to the JSON method if that fails.
+
+    Args:
+        steam_id (str): The Steam ID of the user
+        api_key (str, optional): The Steam API key. Defaults to None.
+
+    Returns:
+        list: A list of game names owned by the user
     """
+    # If API key is provided, use the official Steam API
+    if api_key:
+        games = get_steam_games_api(steam_id, api_key)
+        if games:
+            return games
+        print("Steam API method failed, falling back to web scraping methods...")
+
     # Try the XML method first
     games = get_steam_games_xml(steam_id)
     if games:
@@ -477,6 +527,7 @@ def main():
     parser.add_argument('--update', action='store_true', help='Force update of the compatibility database')
     parser.add_argument('--steam-profile', type=str, help='Steam profile URL to check games compatibility')
     parser.add_argument('--output', type=str, help='Custom output file for compatibility results (CSV format)')
+    parser.add_argument('--api-key', type=str, help='Steam API key (optional, will use web scraping if not provided)')
 
     args = parser.parse_args()
 
@@ -576,7 +627,15 @@ def main():
         username = extract_username_from_url(steam_profile)
 
     print(f"Fetching games for Steam user: {steam_username} (ID: {steam_id})")
-    steam_games = get_steam_games(steam_id)
+
+    # Use API key if provided
+    api_key = args.api_key
+    if api_key:
+        print("Using provided Steam API key to fetch games...")
+    else:
+        print("No Steam API key provided, using web scraping methods...")
+
+    steam_games = get_steam_games(steam_id, api_key)
 
     if not steam_games:
         print("No games found. The user's game list may be private or empty.")
