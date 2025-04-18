@@ -1,14 +1,22 @@
-# M1 Mac Game Compatibility Checker
+# M1 Mac Game Compatibility Checker (Currently being rewritten)
 
 This application helps Mac users check which games in their Steam library are compatible with Apple Silicon (M1/M2) Macs. It scrapes compatibility data from the [Apple Gaming Wiki](https://www.applegamingwiki.com/) and matches it with games in a Steam user's library.
-
+(Currently, the GUI is in development, but the command-line interface is fully functional.)
 ## Features
 
 - User-friendly GUI interface
 - Command-line interface for automation and scripting
 - Automatically fetches and updates compatibility data from Apple Gaming Wiki
-- Retrieves games from a Steam user's library using their profile URL
+- Retrieves games from a Steam user's library using their profile URL (public profile required)
 - Optional Steam API key support for more reliable game fetching
+- Fuzzy matching for game names to improve compatibility detection
+- Supports multiple game compatibility methods:
+  - Native Apple Silicon support
+  - Rosetta 2 compatibility
+  - CrossOver compatibility
+  - Wine compatibility
+  - Parallels compatibility
+  - Linux on ARM compatibility
 - Matches Steam games with compatibility information
 - Shows compatibility status for different methods:
   - Native Apple Silicon support
@@ -23,15 +31,16 @@ This application helps Mac users check which games in their Steam library are co
 
 - Python 3.6 or higher
 - Required Python packages:
-  - pandas
-  - requests
-  - beautifulsoup4
-  - tkinter (included with most Python installations, required for GUI)
+  - pandas (for data manipulation)
+  - requests (for HTTP requests)
+  - beautifulsoup4 (for HTML parsing)
   - openpyxl (optional, for Excel export)
 
 ## Installation
 
-1. Clone or download this repository
+1. Clone or download this repository to your local machine:
+
+```bash
 2. Install the required packages:
 
 ```bash

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M1 Mac Game Compatibility Checker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 800px; margin: auto; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; }
+    input, button { width: 100%; padding: 10px; }
+    textarea { width: 100%; height: 200px; padding: 10px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>M1 Mac Game Compatibility Checker</h1>
+  <div class="form-group">
+    <label for="steamProfile">Steam Profile URL:</label>
+    <input type="text" id="steamProfile" placeholder="Enter Steam Profile URL">
+  </div>
+  <div class="form-group">
+    <label for="apiKey">Steam API Key (Optional):</label>
+    <input type="text" id="apiKey" placeholder="Enter Steam API Key">
+  </div>
+  <div class="form-group">
+    <button id="updateDatabase">Update Database</button>
+  </div>
+  <div class="form-group">
+    <button id="checkCompatibility">Check Compatibility</button>
+  </div>
+  <div class="form-group">
+    <textarea id="results" readonly></textarea>
+  </div>
+</div>
+<script src="renderer.js"></script>
+</body>
+</html>
