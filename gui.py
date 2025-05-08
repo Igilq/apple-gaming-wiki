@@ -11,10 +11,10 @@ from scrape import (
     get_game_info, match_games_with_compatibility
 )
 
-class MacGameCompatibilityCheckerGUI:
+class MacLudusGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("M1 Mac Game Compatibility Checker")
+        self.root.title("MacLudus")
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
 
@@ -78,7 +78,7 @@ class MacGameCompatibilityCheckerGUI:
         # Data storage
         self.compatibility_data = None
         self.matched_games = None
-        self.csv_filename = "m1_compatible_games.csv"
+        self.csv_filename = "macludus_compatible_games.csv"
         self.wiki_url = "https://www.applegamingwiki.com/wiki/M1_compatible_games_master_list"
 
         # Check if database exists and show last update time
@@ -115,7 +115,7 @@ class MacGameCompatibilityCheckerGUI:
                 # Try to save to Excel if openpyxl is available
                 try:
                     import openpyxl
-                    excel_filename = "m1_compatible_games.xlsx"
+                    excel_filename = "macludus_compatible_games.xlsx"
                     df.to_excel(excel_filename, index=False)
                     self.root.after(0, lambda: self.status_var.set(
                         f"Database updated with {len(games)} games. Saved to CSV and Excel."))
@@ -297,5 +297,5 @@ class MacGameCompatibilityCheckerGUI:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = MacGameCompatibilityCheckerGUI(root)
+    app = MacLudusGUI(root)
     root.mainloop()

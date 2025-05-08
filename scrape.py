@@ -523,7 +523,7 @@ def main():
     import sys
     import os.path
 
-    parser = argparse.ArgumentParser(description='Fetch M1 Mac compatibility for Steam games')
+    parser = argparse.ArgumentParser(description='Fetch Apple Silicon Mac compatibility for Steam games')
     parser.add_argument('--update', action='store_true', help='Force update of the compatibility database')
     parser.add_argument('--steam-profile', type=str, help='Steam profile URL to check games compatibility')
     parser.add_argument('--output', type=str, help='Custom output file for compatibility results (CSV format)')
@@ -535,7 +535,7 @@ def main():
     wiki_url = "https://www.applegamingwiki.com/wiki/M1_compatible_games_master_list"
 
     # CSV file to store/read compatibility data
-    csv_filename = "../applegamingwiki/m1_compatible_games.csv"
+    csv_filename = "macludus_compatible_games.csv"
 
     # Auto-update compatibility database if needed
     should_update = args.update or should_update_database(csv_filename)
@@ -557,7 +557,7 @@ def main():
                 # Save to Excel (optional)
                 try:
                     import openpyxl
-                    excel_filename = "m1_compatible_games.xlsx"
+                    excel_filename = "macludus_compatible_games.xlsx"
                     df.to_excel(excel_filename, index=False)
                     print(f"Data also saved to {excel_filename}")
                 except ImportError:

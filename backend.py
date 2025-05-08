@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import pandas as pd
 import os
 import datetime
+import sys
 from scrape import (
     extract_steam_id, get_steam_username, get_steam_games,
     get_game_info, match_games_with_compatibility
@@ -9,8 +10,25 @@ from scrape import (
 
 app = Flask(__name__)
 
-CSV_FILENAME = "m1_compatible_games.csv"
+# Get the directory where the script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+CSV_FILENAME = os.path.join(script_dir, "macludus_compatible_games.csv")
 WIKI_URL = "https://www.applegamingwiki.com/wiki/M1_compatible_games_master_list"
+
+@app.route('/database-status', methods=['GET'])
+def database_status():
+    """Check if the database exists and return its last update time."""
+    if os.path.exists(CSV_FILENAME):
+        last_update = datetime.datetime.fromtimestamp(os.path.getmtime(CSV_FILENAME))
+        return jsonify({
+            "exists": True,
+            "last_updated": last_update.strftime('%Y-%m-%d')
+        })
+    else:
+        return jsonify({
+            "exists": False,
+            "last_updated": None
+        })
 
 @app.route('/update-database', methods=['POST'])
 def update_database():
@@ -47,12 +65,21 @@ def check_compatibility():
         if not steam_id:
             return jsonify({"error": "Invalid Steam profile URL"}), 400
 
+        # Get the Steam username
+        steam_username = get_steam_username(steam_id)
+        if not steam_username:
+            return jsonify({"error": "Could not fetch username for the provided Steam ID"}), 400
+
         steam_games = get_steam_games(steam_id, api_key)
         if not steam_games:
             return jsonify({"error": "No games found in the Steam library"}), 404
 
         matched_games = match_games_with_compatibility(steam_games, compatibility_data)
-        return jsonify({"matched_games": matched_games})
+        return jsonify({
+            "matched_games": matched_games,
+            "username": steam_username,
+            "game_count": len(steam_games)
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -61,7 +88,11 @@ def save_results():
     """Save the compatibility results to a CSV file."""
     data = request.json
     matched_games = data.get("matched_games")
-    file_path = data.get("file_path", "compatibility_results.csv")
+    file_path = data.get("file_path")
+
+    # If no file path is provided, use a default path in the script directory
+    if not file_path:
+        file_path = os.path.join(script_dir, "compatibility_results.csv")
 
     if not matched_games:
         return jsonify({"error": "No data to save"}), 400

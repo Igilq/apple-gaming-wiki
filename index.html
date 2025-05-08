@@ -3,34 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>M1 Mac Game Compatibility Checker</title>
+  <title>MacLudus</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    .container { max-width: 800px; margin: auto; }
+    .container { max-width: 900px; margin: auto; }
     .form-group { margin-bottom: 15px; }
     label { display: block; margin-bottom: 5px; }
     input, button { width: 100%; padding: 10px; }
-    textarea { width: 100%; height: 200px; padding: 10px; }
+    textarea { width: 100%; height: 300px; padding: 10px; font-family: monospace; }
+    .status-bar { display: flex; align-items: center; margin-bottom: 15px; }
+    .status-text { margin-left: 10px; }
+    .progress-bar { 
+      width: 100%; 
+      height: 20px; 
+      background-color: #f0f0f0; 
+      margin-bottom: 15px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      background-color: #4CAF50;
+      transition: width 0.3s;
+    }
+    .button-group { display: flex; gap: 10px; }
+    .button-group button { flex: 1; }
+    .comparison-options {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+    .comparison-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+    }
+    .checkbox-item input {
+      width: auto;
+      margin-right: 5px;
+    }
+    .help-text {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>M1 Mac Game Compatibility Checker</h1>
+  <h1>MacLudus</h1>
+
+  <!-- Steam Profile Section -->
   <div class="form-group">
     <label for="steamProfile">Steam Profile URL:</label>
     <input type="text" id="steamProfile" placeholder="Enter Steam Profile URL">
   </div>
+
+  <!-- API Key Section -->
   <div class="form-group">
     <label for="apiKey">Steam API Key (Optional):</label>
     <input type="text" id="apiKey" placeholder="Enter Steam API Key">
+    <div class="help-text">
+      If provided, the app will use the Steam API instead of web scraping.<br>
+      Get your API key at: <a href="https://steamcommunity.com/dev/apikey" target="_blank">https://steamcommunity.com/dev/apikey</a>
+    </div>
   </div>
-  <div class="form-group">
+
+  <!-- Comparison Options Section -->
+  <div class="comparison-options">
+    <div class="comparison-title">Comparison Options:</div>
+    <div class="checkbox-group">
+      <div class="checkbox-item">
+        <input type="checkbox" id="compareNative" checked>
+        <label for="compareNative">Native</label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="compareRosetta" checked>
+        <label for="compareRosetta">Rosetta 2</label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="compareCrossover" checked>
+        <label for="compareCrossover">CrossOver</label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="compareWine" checked>
+        <label for="compareWine">Wine</label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="compareParallels" checked>
+        <label for="compareParallels">Parallels</label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="compareLinuxArm">
+        <label for="compareLinuxArm">Linux on ARM</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons Section -->
+  <div class="button-group">
     <button id="updateDatabase">Update Database</button>
-  </div>
-  <div class="form-group">
     <button id="checkCompatibility">Check Compatibility</button>
+    <button id="saveResults" disabled>Save Results</button>
   </div>
+
+  <!-- Status Section -->
+  <div class="status-bar">
+    <span>Status:</span>
+    <span id="statusText" class="status-text">Ready</span>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div id="progressBarInner" class="progress-bar-inner"></div>
+  </div>
+
+  <!-- Results Section -->
   <div class="form-group">
+    <label for="results">Results:</label>
     <textarea id="results" readonly></textarea>
   </div>
 </div>

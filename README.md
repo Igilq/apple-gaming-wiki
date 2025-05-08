@@ -1,7 +1,7 @@
-# M1 Mac Game Compatibility Checker (Currently being rewritten)
+# MacLudus
 
 This application helps Mac users check which games in their Steam library are compatible with Apple Silicon (M1/M2) Macs. It scrapes compatibility data from the [Apple Gaming Wiki](https://www.applegamingwiki.com/) and matches it with games in a Steam user's library.
-(Currently, the GUI is in development, but the command-line interface is fully functional.)
+The application features both a modern Electron-based GUI and a command-line interface.
 ## Features
 
 - User-friendly GUI interface
@@ -30,10 +30,12 @@ This application helps Mac users check which games in their Steam library are co
 ## Requirements
 
 - Python 3.6 or higher
+- Node.js and npm (for Electron GUI)
 - Required Python packages:
   - pandas (for data manipulation)
   - requests (for HTTP requests)
   - beautifulsoup4 (for HTML parsing)
+  - flask (for the backend API)
   - openpyxl (optional, for Excel export)
 
 ## Installation
@@ -41,45 +43,63 @@ This application helps Mac users check which games in their Steam library are co
 1. Clone or download this repository to your local machine:
 
 ```bash
-2. Install the required packages:
+git clone https://github.com/Igilq/apple-gaming-wiki.git
+cd apple-gaming-wiki
+```
+
+2. Install the required Python packages:
 
 ```bash
-pip install pandas requests beautifulsoup4
+pip install pandas requests beautifulsoup4 flask
 # Optional for Excel export
 pip install openpyxl
 ```
 
-3. Ensure tkinter is installed (required for GUI):
+3. Install the required Node.js packages for the Electron GUI:
 
-   - **macOS**: If you installed Python using Homebrew, you need to install tkinter separately:
-     ```bash
-     # For Python 3.12 and earlier:
-     brew install python-tk
+```bash
+npm install
+```
 
-     # For Python 3.13:
-     brew install python-tk@3.13
-     ```
+4. (Optional) Build the Electron app for your platform:
 
-   - **Linux (Debian/Ubuntu)**:
-     ```bash
-     sudo apt-get install python3-tk
-     ```
+```bash
+# For macOS
+npm run build:mac
 
-   - **Windows**: Tkinter is included with standard Python installations from python.org
+# For Windows
+npm run build:win
+
+# For Linux
+npm run build:linux
+```
 
 ## Usage
 
 ### Starting the Application
 
-You can start the application using the main.py script:
+You can start the application in different ways:
+
+#### Electron GUI (recommended)
 
 ```bash
-# Launch with GUI (default)
-python main.py
+# Start the Electron app
+npm start
 
-# Launch with GUI explicitly
-python main.py --gui
+# Or if you've built the app, run the executable
+# On macOS:
+open dist/MacLudus-darwin-x64/MacLudus.app
 
+# On Windows:
+start dist\MacLudus-win32-x64\MacLudus.exe
+
+# On Linux:
+./dist/MacLudus-linux-x64/MacLudus
+```
+
+#### Command-line Interface
+
+```bash
 # Launch with command-line interface
 python main.py --cli
 
@@ -87,18 +107,21 @@ python main.py --cli
 python main.py --help
 ```
 
-### Using the GUI
+### Using the Electron GUI
 
-The graphical interface provides an easy way to use the application:
+The Electron-based graphical interface provides an easy and modern way to use the application:
 
 1. Enter a Steam profile URL in the text field
 2. (Optional) Enter your Steam API key in the API key field for more reliable game fetching
    - If you don't have a Steam API key, you can get one at https://steamcommunity.com/dev/apikey
    - If no API key is provided, the application will use web scraping methods
-3. Click "Update Database" to fetch the latest compatibility data (if needed)
-4. Click "Check Compatibility" to analyze the Steam library
-5. View the results in the text area
-6. Click "Save Results" to save the compatibility data to a CSV file
+3. Select which compatibility methods you want to compare (Native, Rosetta 2, CrossOver, Wine, Parallels, Linux on ARM)
+4. Click "Update Database" to fetch the latest compatibility data (if needed)
+5. Click "Check Compatibility" to analyze the Steam library
+6. View the results in the text area, filtered according to your selected comparison options
+7. Click "Save Results" to save the compatibility data to a CSV file
+
+The new comparison options feature allows you to specifically compare different compatibility layers, such as Wine and CrossOver, to see which one performs better for your games.
 
 ![GUI Screenshot](https://i.imgur.com/example.png) <!-- Replace with actual screenshot when available -->
 

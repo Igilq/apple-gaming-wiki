@@ -23,14 +23,14 @@ if __name__ == "__main__":
         if sys.argv[1] == "--gui":
             # Launch the GUI version
             import tkinter as tk
-            from gui import MacGameCompatibilityCheckerGUI
+            from gui import MacLudusGUI
 
             # Start CLI in a separate thread
             cli_thread = threading.Thread(target=run_cli_in_background, args=(sys.argv[2:],))
             cli_thread.start()
 
             root = tk.Tk()
-            app = MacGameCompatibilityCheckerGUI(root)
+            app = MacLudusGUI(root)
             root.mainloop()
         else:
             # Handle other arguments (e.g., CLI)
