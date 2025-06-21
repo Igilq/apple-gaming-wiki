@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('api', {
             // Check if response has content
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                console.warn('Response is not JSON, attempting to parse anyway');
+                console.warn('Response is not JSON, skipping JSON parse');
+                return {};
             }
 
             // Check if response has content length

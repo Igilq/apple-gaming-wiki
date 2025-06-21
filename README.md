@@ -80,7 +80,16 @@ npm run build:linux
 
 You can start the application in different ways:
 
-#### Electron GUI (recommended)
+#### Tkinter GUI (Python Desktop App)
+
+```bash
+# Launch the Tkinter-based GUI
+python3 gui.py
+```
+
+This will open the MacLudus desktop application using Python's Tkinter library. You can enter your Steam profile URL, optionally provide your Steam API key, update the compatibility database, check your library, and save results—all from the graphical interface.
+
+#### Electron GUI
 
 ```bash
 # Start the Electron app

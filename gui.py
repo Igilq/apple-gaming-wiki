@@ -257,8 +257,8 @@ class MacLudusGUI:
 
         for game in matched_games:
             self.results_text.insert(tk.END, 
-                f"{game['name'][:39]:<40} {game['native']:<10} {game['rosetta_2']:<10} "
-                f"{game['crossover']:<10} {game['wine']:<10} {game['parallels']:<10}\n")
+                f"{game.get('name','')[:39]:<40}{game.get('native','Unknown'):<10}{game.get('rosetta_2','Unkown'):<10}"
+                f"{game.get('crossover','Unknown'):<10}{game.get('wine','Unknown'):<10}{game.get('parallels','Unknown'):<10}\n")
 
         self.results_text.config(state=tk.DISABLED)
 

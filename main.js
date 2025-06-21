@@ -8,9 +8,10 @@ let backendProcess;
 // Start the Flask backend server
 function startBackend() {
     // Check if Python is available
-    const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
+    const pythonCommand = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3')
 
     // Start the backend process
+    //TODO: On Unix, a process tree kill utility to ensure all children are killed.
     backendProcess = spawn(pythonCommand, [path.join(__dirname, 'backend.py')]);
 
     backendProcess.stdout.on('data', (data) => {

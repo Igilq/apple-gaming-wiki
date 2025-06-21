@@ -1,11 +1,11 @@
 import subprocess
 import threading
-
+import sys
 def run_cli_in_background(args):
     """Run the CLI version in the background."""
     try:
         process = subprocess.Popen(
-            ['python', 'main.py', '--cli'] + args,
+            [sys.executable, 'main.py', '--cli'] + args,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
@@ -34,7 +34,12 @@ if __name__ == "__main__":
             root.mainloop()
         else:
             # Handle other arguments (e.g., CLI)
-            ...
+            print("CLI mode not implemented in main.py. Please use scrape.py for CLI functionality.")
+            sys.exit(1)
     else:
         # Default to GUI
-        ...
+        import tkinter as tk
+        from gui import MacLudusGUI
+        root = tk.Tk()
+        app = MacLudusGUI(root)
+        root.mainloop()
